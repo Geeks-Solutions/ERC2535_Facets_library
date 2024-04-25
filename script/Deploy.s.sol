@@ -8,14 +8,9 @@ import "facets/diamondLoupeFacet.sol";
 
 /// @dev See the Solidity Scripting tutorial: https://book.getfoundry.sh/tutorials/solidity-scripting
 contract Deploy is BaseScript {
-    function run() public broadcast returns (FacetsLibrary Fl) {
-        DiamondCutFacet Dcf = new DiamondCutFacet();
-        Fl = new FacetsLibrary{ salt: "Geeks" }(broadcaster, address(Dcf)); // adding a salt to trigger CREATE2
+    address internal Dcf;
 
-        // Add the Diamond Loupe Facet
-        DiamondLoupeFacet Dlf = new DiamondLoupeFacet();
-        bytes4[] memory functionSelectors = new bytes4[](1);
-        functionSelectors[0] = IERC165.supportsInterface.selector;
-        addSingleFacet(Fl, functionSelectors, address(Dlf));
+    function run() public broadcast returns (FacetsLibrary Fl) {
+        Fl = new FacetsLibrary{ salt: "Geeks" }(broadcaster, Dcf); // adding a salt to trigger CREATE2
     }
 }
