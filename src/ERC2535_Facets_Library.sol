@@ -10,9 +10,12 @@ pragma solidity ^0.8.20;
  */
 import "./libraries/LibDiamond.sol";
 
+// When no function exists for function called
+error FunctionNotFound(bytes4 _functionSelector);
+
 contract FacetsLibrary {
-    constructor(address diamondCutFacet) {
-        LibDiamond.setContractOwner(msg.sender);
+    constructor(address owner, address diamondCutFacet) {
+        LibDiamond.setContractOwner(owner);
 
         // Add the diamondCut external function from the diamondCutFacet
         IDiamondCut.FacetCut[] memory cut = new IDiamondCut.FacetCut[](1);
@@ -39,7 +42,7 @@ contract FacetsLibrary {
         }
         // get facet from function selector
         address facet = ds.selectorToFacetAndPosition[msg.sig].facetAddress;
-        require(facet != address(0), "Diamond: Function does not exist");
+        if (facet == address(0)) revert FunctionNotFound(msg.sig);
         // Execute external function from facet using delegatecall and return any value.
         assembly {
             // copy function selector and any arguments

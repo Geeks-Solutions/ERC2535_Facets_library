@@ -1,17 +1,22 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.25 <0.9.0;
 
-import { Script } from "forge-std/src/Script.sol";
+import { Script } from "forge-std/Script.sol";
+import { console } from "forge-std/console.sol";
+import "../src/ERC2535_Facets_Library.sol";
 
 abstract contract BaseScript is Script {
     /// @dev Included to enable compilation of the script without a $MNEMONIC environment variable.
-    string internal constant TEST_MNEMONIC = "test test test test test test test test test test test junk";
+    string internal constant LOCAL_ID = "0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc";
+    uint256 internal constant LOCAL_PK =
+        62_974_329_224_788_767_027_781_683_098_475_633_401_756_052_717_538_436_960_952_236_504_350_829_969_338; //"0x8b3a350cf5c34c9194ca85829a2df0ec3153be0318b5e2d3348e872092edffba";
 
     /// @dev Needed for the deterministic deployments.
     bytes32 internal constant ZERO_SALT = bytes32(0);
 
     /// @dev The address of the transaction broadcaster.
     address internal broadcaster;
+    uint256 internal deployerPK;
 
     /// @dev Used to derive the broadcaster's address if $ETH_FROM is not defined.
     string internal mnemonic;
@@ -24,18 +29,33 @@ abstract contract BaseScript is Script {
     ///
     /// The use case for $ETH_FROM is to specify the broadcaster key and its address via the command line.
     constructor() {
-        address from = vm.envOr({ name: "ETH_FROM", defaultValue: address(0) });
-        if (from != address(0)) {
-            broadcaster = from;
-        } else {
-            mnemonic = vm.envOr({ name: "MNEMONIC", defaultValue: TEST_MNEMONIC });
-            (broadcaster,) = deriveRememberKey({ mnemonic: mnemonic, index: 0 });
-        }
+        broadcaster = vm.envOr({ name: "EVM_ID", defaultValue: address(0) });
+        deployerPK = vm.envOr({ name: "EVM_TEST_DEPLOYER_PRIVATE_KEY", defaultValue: LOCAL_PK });
     }
 
     modifier broadcast() {
-        vm.startBroadcast(broadcaster);
+        vm.startBroadcast(deployerPK);
         _;
         vm.stopBroadcast();
+    }
+
+    function addSingleFacet(FacetsLibrary Fl, bytes4[] memory functionSelectors, address facetAddress) public {
+        IDiamondCut.FacetCut[] memory cut = new IDiamondCut.FacetCut[](1);
+
+        cut[0] = IDiamondCut.FacetCut({
+            facetAddress: facetAddress,
+            action: IDiamondCut.FacetCutAction.Add,
+            functionSelectors: functionSelectors
+        });
+        address Diamond = address(Fl);
+
+        // Arguments
+        address arg2 = address(0);
+        bytes memory arg3 = "";
+
+        // Encoding the arguments
+        bytes memory data = abi.encodeWithSelector(IDiamondCut.diamondCut.selector, cut, arg2, arg3);
+        (bool success,) = Diamond.call(data);
+        require(success, "activate logs when running script for more details");
     }
 }
