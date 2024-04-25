@@ -9,10 +9,10 @@ import "facets/OwnershipFacet.sol";
 
 /// @dev See the Solidity Scripting tutorial: https://book.getfoundry.sh/tutorials/solidity-scripting
 contract Deploy is BaseScript {
-    address payable internal facetLibrary = payable(0x8d8189f18c8480a7f715Fb53BBa49dd69c9403DA);
-    address internal Dlf_address;
-    address internal Def_address;
-    address internal Dof_address;
+    address payable internal facetLibrary = payable(0xb8181ff60D696f6E73Eb7b31A46bC665979A2135);
+    address internal Dlf_address = 0xe9beFDdd5e44A6b3eF8c84d42a09CEc99CFd7606;
+    address internal Def_address = 0xe3147f88f6405657CaBC8e23A58673a9b4165553;
+    address internal Dof_address = 0x75B4E1CE314F84Be55B54c6a57629E19aaaddB11;
 
     function run() public broadcast returns (FacetsLibrary Fl) {
         Fl = FacetsLibrary(facetLibrary); // Init the Facet Library to add the new facet to it
