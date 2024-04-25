@@ -19,8 +19,12 @@ contract Deploy is BaseScript {
 
         // Add the Diamond Loupe Facet
         DiamondLoupeFacet Dlf = DiamondLoupeFacet(Dlf_address);
-        bytes4[] memory functionSelectors = new bytes4[](1);
-        functionSelectors[0] = IERC165.supportsInterface.selector;
+        bytes4[] memory functionSelectors = new bytes4[](5);
+        functionSelectors[0] = Dlf.supportsInterface.selector;
+        functionSelectors[1] = Dlf.facets.selector;
+        functionSelectors[2] = Dlf.facetFunctionSelectors.selector;
+        functionSelectors[3] = Dlf.facetAddresses.selector;
+        functionSelectors[4] = Dlf.facetAddress.selector;
         addSingleFacet(Fl, functionSelectors, Dlf_address);
 
         // Deploy the EtherScan Facet and add it to the diamond

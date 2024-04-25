@@ -50,11 +50,12 @@ abstract contract BaseScript is Script {
         address Diamond = address(Fl);
 
         // Arguments
-        address arg2 = address(0);
-        bytes memory arg3 = "";
+        address _init = address(0);
+        bytes memory _calldata = "";
 
         // Encoding the arguments
-        bytes memory data = abi.encodeWithSelector(IDiamondCut.diamondCut.selector, cut, arg2, arg3);
+        bytes memory data = abi.encodeWithSelector(IDiamondCut.diamondCut.selector, cut, _init, _calldata);
+        //console.logBytes(data);
         (bool success,) = Diamond.call(data);
         require(success, "activate logs when running script for more details");
     }
