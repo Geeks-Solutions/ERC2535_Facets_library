@@ -1,3 +1,13 @@
+# EIP-2535 Facets Library
+
+## Ethereum Mainnet
+[DiamondCutFacet](https://etherscan.io/address/0xfc57dF5E0C359238e0e898A31466F4FC38edBAF4#code):  0xfc57dF5E0C359238e0e898A31466F4FC38edBAF4
+[DiamondLoupeFacet](https://etherscan.io/address/0x753c32DD9413d7614FBAe5E293C6B235175E2f74#code): 0x753c32DD9413d7614FBAe5E293C6B235175E2f74
+
+## Sepolia Testnet
+[DiamondCutFacet](https://sepolia.etherscan.io/address/0xea68d407c4d8b212765ef798d3bc2415483aa65b#code): 0xEA68d407c4D8b212765Ef798d3bC2415483Aa65B
+[DiamondLoupeFacet](https://sepolia.etherscan.io/address/0xe9befddd5e44a6b3ef8c84d42a09cec99cfd7606#code): 0xe9beFDdd5e44A6b3eF8c84d42a09CEc99CFd7606
+
 # Foundry Template [![Open in Gitpod][gitpod-badge]][gitpod] [![Github Actions][gha-badge]][gha] [![Foundry][foundry-badge]][foundry] [![License: MIT][license-badge]][license]
 
 [gitpod]: https://gitpod.io/#https://github.com/Geeks-Solutions/ERC2535_Facets_library
